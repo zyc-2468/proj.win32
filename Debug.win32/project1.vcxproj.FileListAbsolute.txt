@@ -1,0 +1,2 @@
+C:\Users\19428\cocoxProjects\project1\proj.win32\Debug.win32\project1.exe
+C:\Users\19428\cocoxProjects\project1\proj.win32\Debug.win32\project1.pdb
