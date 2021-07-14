@@ -16,16 +16,5 @@ Mygraph::Mygraph() {
 	for (int j = 4; j < 11; j++)walls[7][j].type = 1;
 	for (int j = 5; j < 9; j++)walls[10][j].type = 1;
 	for (int j = 9; j < 16; j++)walls[13][j].type = 1;
-	/*
-	walls[6][2].type = 0;
-	walls[7][6].type = 0;
-	walls[9][7].type = 0;
-	walls[8][10].type = 0;
-	walls[5][9].type = 0;
-	walls[2][17].type = 0;
-	walls[5][13].type = 0;
-	walls[5][20].type = 0;
-	walls[11][16].type = 0;
-	*/
 	
 }
