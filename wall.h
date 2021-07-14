@@ -12,7 +12,7 @@ public:
 
 class Mygraph {
 public:
-	wall walls[16][24];
+	Mywall walls[16][24];
 	Mygraph();
 };
 
