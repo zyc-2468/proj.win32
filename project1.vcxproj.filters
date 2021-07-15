@@ -21,7 +21,7 @@
     <ClCompile Include="..\Classes\HelloWorldScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="wall.cpp">
+    <ClCompile Include="square.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,10 +35,10 @@
     <ClInclude Include="..\Classes\HelloWorldScene.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="wall.h">
+    <ClInclude Include="library.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="library.h">
+    <ClInclude Include="square.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
