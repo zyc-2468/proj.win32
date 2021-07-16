@@ -6,4 +6,4 @@
 
 然后，将proj.win32文件夹换成本文件夹。
 
-然后，将Classes和Resources文件夹移到外面一层文件夹。
+然后，将Classes和Resources文件夹复制一份到外面一层文件夹。
