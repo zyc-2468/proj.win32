@@ -120,22 +120,76 @@ bool HelloWorld::init()
     auto lc = CCLayerColor::create(Color4B(255, 250, 250,200));
     this->addChild(lc);
 
+    person = Sprite::create("pfront.png");
+    person->setPosition(Vec2(origin.x + 80, origin.y + 80));
+    person->setGlobalZOrder(5);
+    this->addChild(person);
+
+
     for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 24; j++) {
             if (g.squares[i][j].type == 1) {
                 s[i][j] = Sprite::create("wall.jpg");
+                s[i][j]->setGlobalZOrder(10);
                 s[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
-                this->addChild(s[i][j], 0);
+                this->addChild(s[i][j]);
             }
+            else if (g.squares[i][j].type == 2) {
+                s[i][j] = Sprite::create("wall3.jpg");
+                s[i][j]->setGlobalZOrder(10);
+                s[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
+                this->addChild(s[i][j]);
+            }
+            else if (g.squares[i][j].type == 3) {
+                s[i][j] = Sprite::create("water.jpg");
+                s[i][j]->setGlobalZOrder(10);
+                s[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
+                this->addChild(s[i][j]);
+            }
+            else if (g.squares[i][j].type == 4) {
+                s[i][j] = Sprite::create("campfire1.png");
+                s[i][j]->setGlobalZOrder(10);
+                s[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
+                this->addChild(s[i][j]);
+            }
+            if(g.squares[i][j].door1.hasdoor==1) {
+                if(g.squares[i][j].door1.color == 0)door1[i][j] = Sprite::create("doorred1.png");
+                else if (g.squares[i][j].door1.color == 1)door1[i][j] = Sprite::create("dooryellow1.png");
+                else if (g.squares[i][j].door1.color == 2)door1[i][j] = Sprite::create("doorpink1.png");
+                else if (g.squares[i][j].door1.color == 3)door1[i][j] = Sprite::create("doorblue1.png");
+                else if (g.squares[i][j].door1.color == 4)door1[i][j] = Sprite::create("doorgreen1.png");
+                door1[i][j]->setGlobalZOrder(10);
+                door1[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
+                this->addChild(door1[i][j]);
+            }
+            if(g.squares[i][j].door2.hasdoor==1) {
+                if (g.squares[i][j].door2.color == 0)door1[i][j] = Sprite::create("doorred2.png");
+                else if (g.squares[i][j].door2.color == 1)door1[i][j] = Sprite::create("dooryellow2.png");
+                else if (g.squares[i][j].door2.color == 2)door1[i][j] = Sprite::create("doorpink2.png");
+                else if (g.squares[i][j].door2.color == 3)door1[i][j] = Sprite::create("doorblue2.png");
+                else if (g.squares[i][j].door2.color == 4)door1[i][j] = Sprite::create("doorgreen2.png");
+                door2[i][j]->setGlobalZOrder(10);
+                door2[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 20));
+                this->addChild(door2[i][j]);
+            }
+            if (g.squares[i][j].candle.hascandle == 1) {
+                candle[i][j]= Sprite::create("candle2.png");
+                candle[i][j]->setGlobalZOrder(0);
+                candle[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
+                this->addChild(candle[i][j]);
+            }
+            if (g.squares[i][j].button.hasbutton == 1) {
+                if(g.squares[i][j].button.color==1)button[i][j] = Sprite::create("buttonyellow.png");
+                else if (g.squares[i][j].button.color == 2)button[i][j] = Sprite::create("buttonpink.png");
+                else if (g.squares[i][j].button.color == 3)button[i][j] = Sprite::create("buttonblue.png");
+                else if (g.squares[i][j].button.color == 4)button[i][j] = Sprite::create("buttongreen.png");
+                button[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
+                button[i][j]->setGlobalZOrder(0);
+                this->addChild(button[i][j]);
+            }
+
         }
     }
-
-    person = Sprite::create("pfront.png");
-    person->setPosition(Vec2(origin.x+80, origin.y+80));
-    this->addChild(person);   
-    
-
-
     return true;
 }
 
@@ -153,6 +207,28 @@ int geti(int y) {
 
 int getj(int x) {
     return(x - 20) / 40;
+}
+
+int canArrowGo(int i, int j) { 
+    if (g.squares[i][j].type == 1|| g.squares[i][j].type == 2)return 0;
+    return 1;
+}
+
+int canPersonGo(int i, int j) { //not include the door judgement
+    if (g.squares[i][j].type >= 1)return 0;
+    if (g.squares[i][j].hasbox == 1)return 0;
+    if (g.squares[i][j].candle.hascandle == 1)return 0;
+    return 1;
+}
+
+int checkdoor1(int i, int j) {
+    if (g.squares[i][j].door1.hasdoor == 0 || g.squares[i][j].door1.status == 1)return 1;
+    return 0;
+}
+
+int checkdoor2(int i, int j) {
+    if (g.squares[i][j].door2.hasdoor == 0 || g.squares[i][j].door2.status == 1)return 1;
+    return 0;
 }
 
 bool constrain(int i, int j) {
@@ -177,7 +253,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
     auto moveRight = MoveBy::create(0.1, Point(40, 0));
     switch (keyCode) {
     case EventKeyboard::KeyCode::KEY_UP_ARROW:
-        if (g.squares[posi + 1][posj].type != 1)
+        if (canPersonGo(posi+1,posj)==1&& checkdoor1(posi + 1, posj) == 1)
         {
             int x = person->getPositionX();
             int y = person->getPositionY();
@@ -190,7 +266,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         }
         break;
     case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-        if (g.squares[posi - 1][posj].type != 1)
+        if (canPersonGo(posi - 1, posj) == 1 && checkdoor1(posi, posj) == 1)
         {
             int x = person->getPositionX();
             int y = person->getPositionY();
@@ -203,7 +279,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         }
         break;
     case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-        if (g.squares[posi][posj - 1].type != 1)
+        if (canPersonGo(posi, posj-1) == 1 && checkdoor2(posi, posj) == 1)
         {
             int x = person->getPositionX();
             int y = person->getPositionY();
@@ -216,7 +292,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         }
         break;
     case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-        if (g.squares[posi][posj + 1].type != 1)
+        if (canPersonGo(posi, posj+1) == 1 && checkdoor2(posi, posj + 1) == 1)
         {
             int x = person->getPositionX();
             int y = person->getPositionY();
@@ -229,64 +305,241 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         }
         break;
     case EventKeyboard::KeyCode::KEY_SPACE:
-        if (direction==0&&g.squares[posi+1][posj].type != 1|| direction == 1 && g.squares[posi - 1][posj].type != 1|| direction == 3 && g.squares[posi][posj-1].type != 1|| direction == 0 && g.squares[posi][posj+1].type != 1)
+        if (direction == 0 && g.squares[posi + 1][posj].type != 1 || direction == 1 && g.squares[posi - 1][posj].type != 1 || direction == 2 && g.squares[posi][posj - 1].type != 1 || direction == 3 && g.squares[posi][posj + 1].type != 1)
         {
-           auto bomb = Sprite::create("bomb.png");
-           if(direction==0)bomb->setPosition(Vec2(origin.x+getx(posj),origin.y+gety(posi)+40));
-           else if (direction == 1)bomb->setPosition(Vec2(origin.x + getx(posj), origin.y + gety(posi) - 40));
-           else if (direction == 2)bomb->setPosition(Vec2(origin.x + getx(posj)-40, origin.y + gety(posi)));
-           else if(direction == 3)bomb->setPosition(Vec2(origin.x + getx(posj)+40, origin.y + gety(posi)));
-           this->addChild(bomb);
-           auto ani = explodeAnimation();
-           auto explodecall = CallFunc::create([=] {
-               this->removeChild(bomb, true);
-               int i = geti(bomb->getPositionY());
-               int j = getj(bomb->getPositionX());
-               if (constrain(i+1, j)&&g.squares[i+1][j].type==1) {
-                   CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
-                   s[i + 1][j]->setTexture(texture);
-                   g.squares[i + 1][j].type = 0;
-               }
-               if (constrain(i + 1, j-1) && g.squares[i + 1][j-1].type == 1) {
-                   CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
-                   s[i + 1][j-1]->setTexture(texture);
-                   g.squares[i + 1][j-1].type = 0;
-               }
-               if (constrain(i + 1, j+1) && g.squares[i + 1][j+1].type == 1) {
-                   CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
-                   s[i + 1][j+1]->setTexture(texture);
-                   g.squares[i + 1][j+1].type = 0;
-               }
-               if (constrain(i, j-1) && g.squares[i][j-1].type == 1) {
-                   CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
-                   s[i][j-1]->setTexture(texture);
-                   g.squares[i][j-1].type = 0;
-               }
-               if (constrain(i, j+1) && g.squares[i][j+1].type == 1) {
-                   CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
-                   s[i][j+1]->setTexture(texture);
-                   g.squares[i][j+1].type = 0;
-               }
-               if (constrain(i-1, j - 1) && g.squares[i-1][j - 1].type == 1) {
-                   CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
-                   s[i-1][j - 1]->setTexture(texture);
-                   g.squares[i-1][j - 1].type = 0;
-               }
-               if (constrain(i-1, j) && g.squares[i-1][j].type == 1) {
-                   CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
-                   s[i-1][j]->setTexture(texture);
-                   g.squares[i-1][j].type = 0;
-               }
-               if (constrain(i-1, j + 1) && g.squares[i-1][j + 1].type == 1) {
-                   CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
-                   s[i-1][j + 1]->setTexture(texture);
-                   g.squares[i-1][j + 1].type = 0;
-               }
-               });
-           auto act = Animate::create(ani);
-           auto seq = Sequence::create(cocos2d::DelayTime::create(2),
-               act, cocos2d::DelayTime::create(0.3), explodecall, NULL);
-           bomb->runAction(seq);
+            auto bomb = Sprite::create("bomb.png");
+            bomb->setGlobalZOrder(20);
+            if (direction == 0)bomb->setPosition(Vec2(origin.x + getx(posj), origin.y + gety(posi) + 40));
+            else if (direction == 1)bomb->setPosition(Vec2(origin.x + getx(posj), origin.y + gety(posi) - 40));
+            else if (direction == 2)bomb->setPosition(Vec2(origin.x + getx(posj) - 40, origin.y + gety(posi)));
+            else if (direction == 3)bomb->setPosition(Vec2(origin.x + getx(posj) + 40, origin.y + gety(posi)));
+            this->addChild(bomb);
+            auto ani = explodeAnimation();
+            auto explodecall = CallFunc::create([=] {
+                this->removeChild(bomb, true);
+                int i = geti(bomb->getPositionY());
+                int j = getj(bomb->getPositionX());
+                if (constrain(i + 1, j) && g.squares[i + 1][j].type == 1) {
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
+                    s[i + 1][j]->setGlobalZOrder(0);
+                    s[i + 1][j]->setTexture(texture);
+                    g.squares[i + 1][j].type = 0;
+                }
+                if (constrain(i + 1, j - 1) && g.squares[i + 1][j - 1].type == 1) {
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
+                    s[i + 1][j - 1]->setGlobalZOrder(0);
+                    s[i + 1][j - 1]->setTexture(texture);
+                    g.squares[i + 1][j - 1].type = 0;
+                }
+                if (constrain(i + 1, j + 1) && g.squares[i + 1][j + 1].type == 1) {
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
+                    s[i + 1][j + 1]->setGlobalZOrder(0);
+                    s[i + 1][j + 1]->setTexture(texture);
+                    g.squares[i + 1][j + 1].type = 0;
+                }
+                if (constrain(i, j - 1) && g.squares[i][j - 1].type == 1) {
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
+                    s[i][j - 1]->setGlobalZOrder(0);
+                    s[i][j - 1]->setTexture(texture);
+                    g.squares[i][j - 1].type = 0;
+                }
+                if (constrain(i, j + 1) && g.squares[i][j + 1].type == 1) {
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
+                    s[i][j + 1]->setGlobalZOrder(0);
+                    s[i][j + 1]->setTexture(texture);
+                    g.squares[i][j + 1].type = 0;
+                }
+                if (constrain(i - 1, j - 1) && g.squares[i - 1][j - 1].type == 1) {
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
+                    s[i - 1][j - 1]->setGlobalZOrder(0);
+                    s[i - 1][j - 1]->setTexture(texture);
+                    g.squares[i - 1][j - 1].type = 0;
+                }
+                if (constrain(i - 1, j) && g.squares[i - 1][j].type == 1) {
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
+                    s[i - 1][j]->setGlobalZOrder(0);
+                    s[i - 1][j]->setTexture(texture);
+                    g.squares[i - 1][j].type = 0;
+                }
+                if (constrain(i - 1, j + 1) && g.squares[i - 1][j + 1].type == 1) {
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("wall2.jpg");
+                    s[i - 1][j + 1]->setGlobalZOrder(0);
+                    s[i - 1][j + 1]->setTexture(texture);
+                    g.squares[i - 1][j + 1].type = 0;
+                }
+                });
+            auto act = Animate::create(ani);
+            auto seq = Sequence::create(cocos2d::DelayTime::create(2),
+                act, cocos2d::DelayTime::create(0.3), explodecall, NULL);
+            bomb->runAction(seq);
+        }
+        break;
+
+    case EventKeyboard::KeyCode::KEY_ENTER:
+        {
+        auto firearrow = Sprite::create("firearrow.png");
+        firearrow->setGlobalZOrder(19);
+        firearrow->setPosition(Vec2(origin.x + getx(posj), origin.y + gety(posi)));
+        if (direction == 1)firearrow->setRotation(90);
+        else if (direction == 2)firearrow->setRotation(180);
+        else if (direction == 0)firearrow->setRotation(270);
+        this->addChild(firearrow);
+        if (direction == 0) {
+            int i;
+            for (i = posi; i < 16; i++) {
+                if (canArrowGo(i, posj) == 0)break;
+            }
+            if (i - posi >= 2) {
+                auto flycall = CallFunc::create([=] {
+                    this->removeChild(firearrow, true);
+                    });
+                auto fly = MoveBy::create(((i - posi) * 40 - 50) / 600.0, Point(0, (i - posi) * 40 - 50));
+                firearrow->runAction(fly);
+                auto seq = Sequence::create(fly, cocos2d::DelayTime::create(0.5), flycall, NULL);
+                firearrow->runAction(seq);
+            }
+        }
+        else if (direction == 1) {
+            int i;
+            for (i = posi; i >= 0; i--) {
+                if (canArrowGo(i, posj) == 0)break;
+            }
+            if (posi - i >= 2) {
+                auto flycall = CallFunc::create([=] {
+                    this->removeChild(firearrow, true);
+                    });
+                auto fly = MoveBy::create(-((i - posi) * 40 + 50) / 600.0, Point(0, (i - posi) * 40 + 50));
+                firearrow->runAction(fly);
+                auto seq = Sequence::create(fly, cocos2d::DelayTime::create(0.5), flycall, NULL);
+                firearrow->runAction(seq);
+            }
+        }
+        else if (direction == 2) {
+            int j;
+            for (j = posj; j >= 0; j--) {
+                if (canArrowGo(posi, j) == 0)break;
+            }
+            if (posj - j >= 2) {
+                auto flycall = CallFunc::create([=] {
+                    this->removeChild(firearrow, true);
+                    });
+                auto fly = MoveBy::create(-((j - posj) * 40 + 50) / 600.0, Point((j - posj) * 40 + 50, 0));
+                firearrow->runAction(fly);
+                auto seq = Sequence::create(fly, cocos2d::DelayTime::create(0.5), flycall, NULL);
+                firearrow->runAction(seq);
+            }
+        }
+        else if (direction == 3) {
+            int j;
+            for (j = posj; j < 24; j++) {
+                if (canArrowGo(posi, j) == 0)break;
+            }
+            if (j - posj >= 2) {
+                auto flycall = CallFunc::create([=] {
+                    this->removeChild(firearrow, true);
+                    });
+                auto fly = MoveBy::create(((j - posj) * 40 - 50) / 600.0, Point((j - posj) * 40 - 50, 0));
+                firearrow->runAction(fly);
+                auto seq = Sequence::create(fly, cocos2d::DelayTime::create(0.5), flycall, NULL);
+                firearrow->runAction(seq);
+            }
+        }
+        }
+        break;
+    case EventKeyboard::KeyCode::KEY_BACKSPACE:
+    {
+        auto firearrow = Sprite::create("arrow.png");
+        firearrow->setGlobalZOrder(19);
+        firearrow->setPosition(Vec2(origin.x + getx(posj), origin.y + gety(posi)));
+        if (direction == 1)firearrow->setRotation(90);
+        else if (direction == 2)firearrow->setRotation(180);
+        else if (direction == 0)firearrow->setRotation(270);
+        this->addChild(firearrow);
+        if (direction == 0) {
+            int i;
+            for (i = posi; i < 16; i++) {
+                if (canArrowGo(i, posj) == 0)break;
+            }
+            if (i - posi >= 2) {
+                auto flycall = CallFunc::create([=] {
+                    this->removeChild(firearrow, true);
+                    });
+                auto fly = MoveBy::create(((i - posi) * 40 - 50) / 600.0, Point(0, (i - posi) * 40 - 50));
+                firearrow->runAction(fly);
+                auto seq = Sequence::create(fly, cocos2d::DelayTime::create(0.5), flycall, NULL);
+                firearrow->runAction(seq);
+            }
+        }
+        else if (direction == 1) {
+            int i;
+            for (i = posi; i >= 0; i--) {
+                if (canArrowGo(i, posj) == 0)break;
+            }
+            if (posi - i >= 2) {
+                auto flycall = CallFunc::create([=] {
+                    this->removeChild(firearrow, true);
+                    });
+                auto fly = MoveBy::create(-((i - posi) * 40 + 50) / 600.0, Point(0, (i - posi) * 40 + 50));
+                firearrow->runAction(fly);
+                auto seq = Sequence::create(fly, cocos2d::DelayTime::create(0.5), flycall, NULL);
+                firearrow->runAction(seq);
+            }
+        }
+        else if (direction == 2) {
+            int j;
+            for (j = posj; j >= 0; j--) {
+                if (canArrowGo(posi, j) == 0)break;
+            }
+            if (posj - j >= 2) {
+                auto flycall = CallFunc::create([=] {
+                    this->removeChild(firearrow, true);
+                    });
+                auto fly = MoveBy::create(-((j - posj) * 40 + 50) / 600.0, Point((j - posj) * 40 + 50, 0));
+                firearrow->runAction(fly);
+                auto seq = Sequence::create(fly, cocos2d::DelayTime::create(0.5), flycall, NULL);
+                firearrow->runAction(seq);
+            }
+        }
+        else if (direction == 3) {
+            int j;
+            for (j = posj; j < 24; j++) {
+                if (canArrowGo(posi, j) == 0)break;
+            }
+            if (j - posj >= 2) {
+                auto flycall = CallFunc::create([=] {
+                    this->removeChild(firearrow, true);
+                    });
+                auto fly = MoveBy::create(((j - posj) * 40 - 50) / 600.0, Point((j - posj) * 40 - 50, 0));
+                firearrow->runAction(fly);
+                auto seq = Sequence::create(fly, cocos2d::DelayTime::create(0.5), flycall, NULL);
+                firearrow->runAction(seq);
+            }
+        }
+    }
+    break;
+    case EventKeyboard::KeyCode::KEY_ALT:
+        if (direction == 0 && g.squares[posi + 1][posj].type != 1 || direction == 1 && g.squares[posi - 1][posj].type != 1 || direction == 2 && g.squares[posi][posj - 1].type != 1 || direction == 3 && g.squares[posi][posj + 1].type != 1)
+        {
+            auto bomb = Sprite::create("box.png");
+            bomb->setGlobalZOrder(20);
+            if (direction == 0) {
+                bomb->setPosition(Vec2(origin.x + getx(posj), origin.y + gety(posi) + 40));
+                g.squares[posi + 1][posj].hasbox = 1;
+            }
+            else if (direction == 1) {
+                bomb->setPosition(Vec2(origin.x + getx(posj), origin.y + gety(posi) - 40));
+                g.squares[posi - 1][posj].hasbox = 1;
+            }
+            else if (direction == 2) {
+                bomb->setPosition(Vec2(origin.x + getx(posj) - 40, origin.y + gety(posi)));
+                g.squares[posi][posj - 1].hasbox = 1;
+            }
+
+            else if (direction == 3) {
+                bomb->setPosition(Vec2(origin.x + getx(posj) + 40, origin.y + gety(posi)));
+                g.squares[posi][posj + 1].hasbox = 1;
+            }
+            this->addChild(bomb);
         }
         break;
     }

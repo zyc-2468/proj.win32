@@ -43,6 +43,10 @@ public:
     CREATE_FUNC(HelloWorld);
     cocos2d::Sprite* person = new cocos2d::Sprite();
     cocos2d::Sprite* s[16][24];
+    cocos2d::Sprite* door1[16][24];
+    cocos2d::Sprite* door2[16][24];
+    cocos2d::Sprite* candle[16][24];
+    cocos2d::Sprite* button[16][24];
     virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     cocos2d::Animation* getAnimation(string name, float delay, int num);
     cocos2d::Animation* explodeAnimation();
