@@ -257,18 +257,28 @@ void HelloWorld::iniFunc() {
                 door1[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
                 this->addChild(door1[i][j]);
             }
+            if (g.squares[i][j].type == 3 && g.squares[i][j].board.hasboard == 1) {
+                board[i][j] = Sprite::create("board.png");
+                board[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
+                board[i][j]->setOpacity(130);
+                board[i][j]->setGlobalZOrder(0);
+                this->addChild(board[i][j]);
+            }
             if (g.squares[i][j].door2.hasdoor == 1) {
-                if (g.squares[i][j].door2.color == 0)door1[i][j] = Sprite::create("doorred3.png");
-                else if (g.squares[i][j].door2.color == 1)door1[i][j] = Sprite::create("dooryellow3.png");
-                else if (g.squares[i][j].door2.color == 2)door1[i][j] = Sprite::create("doorpink3.png");
-                else if (g.squares[i][j].door2.color == 3)door1[i][j] = Sprite::create("doorblue3.png");
-                else if (g.squares[i][j].door2.color == 4)door1[i][j] = Sprite::create("doorgreen3.png");
+                if (g.squares[i][j].door2.color == 0)door2[i][j] = Sprite::create("doorred3.png");
+                else if (g.squares[i][j].door2.color == 1)door2[i][j] = Sprite::create("dooryellow3.png");
+                else if (g.squares[i][j].door2.color == 2)door2[i][j] = Sprite::create("doorpink3.png");
+                else if (g.squares[i][j].door2.color == 3)door2[i][j] = Sprite::create("doorblue3.png");
+                else if (g.squares[i][j].door2.color == 4)door2[i][j] = Sprite::create("doorgreen3.png");
                 door2[i][j]->setGlobalZOrder(10);
-                door2[i][j]->setPosition(Vec2(origin.x + j * 40 + 22, origin.y + i * 40 + 40));
+                door2[i][j]->setPosition(Vec2(origin.x + j * 40 + 28, origin.y + i * 40 + 40));
                 this->addChild(door2[i][j]);
             }
             if (g.squares[i][j].candle.hascandle == 1) {
-                candle[i][j] = Sprite::create("candle2.png");
+                if (g.squares[i][j].candle.state == 0) {
+                    candle[i][j] = Sprite::create("candle2.png");
+                }
+                else candle[i][j]= Sprite::create("candle1.png");
                 candle[i][j]->setGlobalZOrder(0);
                 candle[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
                 this->addChild(candle[i][j]);
@@ -278,6 +288,7 @@ void HelloWorld::iniFunc() {
                 else if (g.squares[i][j].button.color == 2)button[i][j] = Sprite::create("buttonpink.png");
                 else if (g.squares[i][j].button.color == 3)button[i][j] = Sprite::create("buttonblue.png");
                 else if (g.squares[i][j].button.color == 4)button[i][j] = Sprite::create("buttongreen.png");
+                else if (g.squares[i][j].button.color == 5)button[i][j] = Sprite::create("buttonorange.png");
                 button[i][j]->setPosition(Vec2(origin.x + j * 40 + 40, origin.y + i * 40 + 40));
                 button[i][j]->setGlobalZOrder(0);
                 this->addChild(button[i][j]);
@@ -306,7 +317,7 @@ void HelloWorld::iniFunc() {
     }
     for (int i = 0; i < g.inifirearrow.size(); i++) {
         Myarrow arrow;
-        arrow.fire = 0;
+        arrow.fire = 1;
         *arrow.state = 5;
         arrow.arrow = Sprite::create("firearrow3.png");
         arrow.arrow->setPosition(Vec2(origin.x + g.inifirearrow[i].j * 40 + 40, origin.y + g.inifirearrow[i].i * 40 + 40));
@@ -336,6 +347,15 @@ void HelloWorld::iniFunc() {
         this->addChild(box.box);
         auto rep = awagAnimation();
         box.box->runAction(rep);
+        boxes.push_back(box);
+    }
+    for (int i = 0; i < g.inibox2.size(); i++) {
+        Mybox box;
+        *box.state = 0;
+        box.box = Sprite::create("box.png");
+        box.box->setPosition(Vec2(origin.x + g.inibox2[i].j * 40 + 40, origin.y + g.inibox2[i].i * 40 + 40));
+        box.box->setGlobalZOrder(5);
+        this->addChild(box.box);
         boxes.push_back(box);
     }
     for (int i = 0; i < g.iniblood.size(); i++) {
@@ -374,7 +394,7 @@ void HelloWorld::iniFunc() {
     menubomb->setGlobalZOrder(0);
     this->addChild(menubomb);
 
-    for (int i = 0; i < g.bombnum; i++) {
+    for (int i = 0; i < g.blood; i++) {
         blood[i] = Sprite::create("blood.png");
         blood[i]->setPosition(1200 + 40 * i, 860);
         this->addChild(blood[i]);
@@ -421,6 +441,7 @@ int dis(int x, int y) {
 
 int HelloWorld::canArrowGo(int i, int j) {
     if (constrain(i, j) == 0)return 0;
+    if (hasBox(i, j))return 0;
     if (g.squares[i][j].type == 1|| g.squares[i][j].type == 2)return 0;
     return 1;
 }
@@ -526,7 +547,7 @@ void HelloWorld::doorChange(int i, int j, int color,int mode) {
             }
             door2[i][j]->setGlobalZOrder(10);
             door2[i][j]->setPosition(Vec2(j * 40 + 30, i * 40 + 40));
-            this->addChild(door1[i][j]);
+            this->addChild(door2[i][j]);
             g.squares[i][j].door2.status = 1;
         }
     }
@@ -575,9 +596,63 @@ void HelloWorld::doorChange(int i, int j, int color,int mode) {
                 door2[i][j] = Sprite::create("doorgreen3.png");
             }
             door2[i][j]->setGlobalZOrder(10);
-            door2[i][j]->setPosition(Vec2(j * 40 + 22, i * 40 + 40));
+            door2[i][j]->setPosition(Vec2(j * 40 + 28, i * 40 + 40));
             this->addChild(door2[i][j]);
             g.squares[i][j].door2.status = 0;
+        }
+    }
+}
+
+void HelloWorld::boardChange(int i, int j,int mode) {
+    if (constrain(i, j) == 0)return;
+    if (g.squares[i][j].board.hasboard == 1 && mode == 0 && g.squares[i][j].board.state == 0) {
+        g.squares[i][j].board.nowbutton++;
+        if (g.squares[i][j].board.nowbutton == g.squares[i][j].board.needbutton) {
+            board[i][j]->setOpacity(255);
+            g.squares[i][j].board.state = 1;
+            for (auto box : boxes) {
+                if (getpos(box.box) == point(i, j)) {
+                    *box.state = 0;
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("box.png");
+                    box.box->setTexture(texture);
+                    box.box->setGlobalZOrder(5);
+                }
+            }
+            for (auto bomb : bombs) {
+                if (getpos(bomb.bomb) == point(i, j)) {
+                    *bomb.state = 2;
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("bomb2.png");
+                    bomb.bomb->setTexture(texture);
+                    bomb.bomb->setGlobalZOrder(20);
+                }
+            }
+        }
+    }
+    
+    else if (g.squares[i][j].board.hasboard == 1 && mode == 1) {
+        g.squares[i][j].board.nowbutton--;
+        if (g.squares[i][j].board.state == 1) {
+            board[i][j]->setOpacity(130);
+            g.squares[i][j].board.state = 0;
+            if (posi == i && posj == j) {
+                auto seq = dropwaterSeq2(g.squares[i][j].board.toi, g.squares[i][j].board.toj);
+                person->runAction(seq);
+            }
+            for (auto box : boxes) {
+                if (getpos(box.box) == point(i, j)) {
+                    *box.state = 3;
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("box4.png");
+                    box.box->setTexture(texture);
+                }
+            }
+            for (auto bomb : bombs) {
+                if (getpos(bomb.bomb) == point(i, j)) {
+                    *bomb.state = 3;
+                    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("bomb4.png");
+                    bomb.bomb->setTexture(texture);
+                    bomb.bomb->stopActionByTag(1);
+                }
+            }
         }
     }
 }
@@ -586,14 +661,33 @@ void HelloWorld::doorChange(int i, int j, int color,int mode) {
 
 void HelloWorld::checkonto(int i, int j) {
     if (g.squares[i][j].button.hasbutton == 1) {
-        doorChange(g.squares[i][j].button.doorpos.i, g.squares[i][j].button.doorpos.j, g.squares[i][j].button.color,0);
+        if (g.squares[i][j].button.color <= 4) {
+            doorChange(g.squares[i][j].button.doorpos.i, g.squares[i][j].button.doorpos.j, g.squares[i][j].button.color, 0);
+        }
+        else if (g.squares[i][j].button.color == 5) {
+            boardChange(g.squares[i][j].button.doorpos.i, g.squares[i][j].button.doorpos.j, 0);
+        }
     }
     
+}
+
+
+void HelloWorld::checkleave(int i, int j) {
+    if (g.squares[i][j].button.hasbutton == 1) {
+        if (g.squares[i][j].button.color <= 4) {
+            doorChange(g.squares[i][j].button.doorpos.i, g.squares[i][j].button.doorpos.j, g.squares[i][j].button.color, 1);
+        }
+        else if (g.squares[i][j].button.color == 5) {
+            boardChange(g.squares[i][j].button.doorpos.i, g.squares[i][j].button.doorpos.j, 1);
+        }
+    }
 }
 
 void HelloWorld::boxonto(Mybox box, int i, int j) {
     if (isWater(i,j)) {
         *box.state = 3;
+        CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("box4.png");
+        box.box->setTexture(texture);
     }
     if (g.squares[i][j].type == 4) {
         CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("campfire2.png");
@@ -606,7 +700,7 @@ void HelloWorld::boxonto(Mybox box, int i, int j) {
 void HelloWorld::bombonto(Mybomb bomb, int i, int j) {
     if (isWater(i, j)) {
         *bomb.state = 3;
-        CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("bomb2.png");
+        CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("bomb4.png");
         bomb.bomb->setTexture(texture);
         bomb.bomb->setGlobalZOrder(0);
         bomb.bomb->stopActionByTag(1);
@@ -784,24 +878,29 @@ void HelloWorld::personleave(int i, int j) {
     }
 }
 
-void HelloWorld::checkleave(int i, int j) {
-    if (g.squares[i][j].button.hasbutton == 1) {
-        doorChange(g.squares[i][j].button.doorpos.i, g.squares[i][j].button.doorpos.j, g.squares[i][j].button.color,1);
-    }
-}
 
 void HelloWorld::candleLight(int i, int j) {
     CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("candle1.png");
     candle[i][j]->setTexture(texture);
     g.squares[i][j].candle.state = 1;
-    doorChange(g.squares[i][j].candle.doorpos.i, g.squares[i][j].candle.doorpos.j, 0,0);
+    if (g.squares[g.squares[i][j].candle.doorpos.i][g.squares[i][j].candle.doorpos.j].door1.dooropen() || g.squares[g.squares[i][j].candle.doorpos.i][g.squares[i][j].candle.doorpos.j].door2.dooropen()) {
+        doorChange(g.squares[i][j].candle.doorpos.i, g.squares[i][j].candle.doorpos.j, 0, 1);
+    }
+    else {
+        doorChange(g.squares[i][j].candle.doorpos.i, g.squares[i][j].candle.doorpos.j, 0, 0);
+    }
 }
 
 void HelloWorld::candleDark(int i, int j) {
     CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("candle2.png");
     candle[i][j]->setTexture(texture);
     g.squares[i][j].candle.state = 0;
-    doorChange(g.squares[i][j].candle.doorpos.i, g.squares[i][j].candle.doorpos.j, 0, 1);
+    if (g.squares[g.squares[i][j].candle.doorpos.i][g.squares[i][j].candle.doorpos.j].door1.dooropen() || g.squares[g.squares[i][j].candle.doorpos.i][g.squares[i][j].candle.doorpos.j].door2.dooropen()) {
+        doorChange(g.squares[i][j].candle.doorpos.i, g.squares[i][j].candle.doorpos.j, 0, 1);
+    }
+    else {
+        doorChange(g.squares[i][j].candle.doorpos.i, g.squares[i][j].candle.doorpos.j, 0, 0);
+    }
 }
 
 void HelloWorld::setPic(Sprite* spr,string s) {
@@ -858,37 +957,37 @@ RepeatForever* HelloWorld::awagAnimation() {
     return rep;
 }
 
-Animation* dropwaterAnimation(int dir) {
+Animation* dropwaterAnimation() {
     auto ani = Animation::create();
-    if(dir==0)ani->addSpriteFrameWithFile("pback.png");
-    else if (dir == 1)ani->addSpriteFrameWithFile("pfront.png");
-    else if (dir == 2)ani->addSpriteFrameWithFile("pleft.png");
-    else if (dir == 3)ani->addSpriteFrameWithFile("pright.png");
+    if(direction==0)ani->addSpriteFrameWithFile("pback.png");
+    else if (direction == 1)ani->addSpriteFrameWithFile("pfront.png");
+    else if (direction == 2)ani->addSpriteFrameWithFile("pleft.png");
+    else if (direction == 3)ani->addSpriteFrameWithFile("pright.png");
     ani->addSpriteFrameWithFile("water2.png");
     ani->setDelayPerUnit(0.05f);
     ani->setRestoreOriginalFrame(false);
     return ani;
 }
 
-Animation* dropwaterAnimation2(int dir) {
+Animation* dropwaterAnimation2() {
     auto ani = Animation::create();
     ani->addSpriteFrameWithFile("water2.png");
-    if (dir == 0)ani->addSpriteFrameWithFile("pback.png");
-    else if (dir == 1)ani->addSpriteFrameWithFile("pfront.png");
-    else if (dir == 2)ani->addSpriteFrameWithFile("pleft.png");
-    else if (dir == 3)ani->addSpriteFrameWithFile("pright.png");
+    if (direction == 0)ani->addSpriteFrameWithFile("pback.png");
+    else if (direction == 1)ani->addSpriteFrameWithFile("pfront.png");
+    else if (direction == 2)ani->addSpriteFrameWithFile("pleft.png");
+    else if (direction == 3)ani->addSpriteFrameWithFile("pright.png");
     ani->setDelayPerUnit(0.2f);
     ani->setRestoreOriginalFrame(false);
     return ani;
 }
 
 Sequence* HelloWorld::dropwaterSeq(int dir) {
-    auto ani = dropwaterAnimation(dir);
+    auto ani = dropwaterAnimation();
     auto act = Animate::create(ani);
     auto callfunc = CallFunc::create([=] {
         renewBlood(-1);
         });
-    auto ani2= dropwaterAnimation2(dir);
+    auto ani2= dropwaterAnimation2();
     auto act2 = Animate::create(ani2);
     MoveBy* move1, *move2;
     if (dir == 0) {
@@ -918,6 +1017,28 @@ Sequence* HelloWorld::dropwaterSeq(int dir) {
     return seq;
 }
 
+Sequence* HelloWorld::dropwaterSeq2(int i, int j) {
+    auto ani = dropwaterAnimation();
+    auto act = Animate::create(ani);
+    auto callfunc = CallFunc::create([=] {
+        renewBlood(-1);
+        });
+    auto ani2 = dropwaterAnimation2();
+    auto act2 = Animate::create(ani2);
+    auto blink = Blink::create(1, 3);
+    auto startcall = CallFunc::create([=] {
+        canop = 0;
+        });
+    auto finishcall = CallFunc::create([=] {
+        if (over == 0)canop = 1;
+        });
+    auto move = MoveTo::create(dis(getx(posj), getx(j), gety(posi), gety(i)) / 600.0, Point(getx(j), gety(i)));
+    auto seq = Sequence::create(startcall, act, callfunc, cocos2d::DelayTime::create(0.3), act2, move, blink, finishcall, NULL);
+    return seq;
+}
+
+
+
 point HelloWorld::getpos(cocos2d::Sprite* spri) {
     return point(geti(spri->getPositionY()), getj(spri->getPositionX()));
 }
@@ -938,7 +1059,7 @@ int HelloWorld::hasBox2(int i, int j) {
 
 
 bool HelloWorld::isWater(int i, int j) {
-    if(constrain(i, j) && g.squares[i][j].type == 3 && hasBox2(i, j) == 0)return 1;
+    if(constrain(i, j) && g.squares[i][j].type == 3 && hasBox2(i, j) == 0&&g.squares[i][j].board.cango()==0)return 1;
     return 0;
 }
 
@@ -972,6 +1093,10 @@ void HelloWorld::explodeop1(int i,int j, int dir) {
     for (auto bomb : bombs) {
         if (*bomb.state == 3)continue;
         if (getpos(bomb.bomb) == point(i, j) && (*bomb.state == 2||*bomb.state==5)) {
+            if (*bomb.state == 5) {
+                bombonto(bomb,i, j);
+                checkonto(i, j);
+            }
             *bomb.state = 0;
             bomb.bomb->stopAllActions();
             setPic(bomb.bomb, "bomb.png");
@@ -1242,7 +1367,10 @@ void HelloWorld::update(float dt) {
             arrow.arrow->setTexture(texture);
         }
         for (auto b = bombs.begin(); b != bombs.end();) {
-            if (*b->state == 3)continue;
+            if (*b->state == 3) {
+                b++;
+                continue;
+            }
             if (arrow.fire == 0 && getpos(arrow.arrow) == getpos(b->bomb) && *b->state == 0) {
                 b->bomb->stopAllActions();
                 Mybomb newbomb;
@@ -1256,7 +1384,11 @@ void HelloWorld::update(float dt) {
                 b = bombs.erase(b);
                 bombs.push_back(newbomb);
             }
-            else if (arrow.fire == 1 && getpos(arrow.arrow) == getpos(b->bomb) && *b->state == 2) {
+            else if (arrow.fire == 1 && getpos(arrow.arrow) == getpos(b->bomb) && (*b->state == 2||*b->state==5)) {
+                if (*b->state == 5) {
+                    bombonto(*b, getpos(b->bomb).i, getpos(b->bomb).j);
+                    checkonto(getpos(b->bomb).i, getpos(b->bomb).j);
+                }
                 Mybomb newbomb;
                 newbomb.bomb = Sprite::create("bomb.png");
                 newbomb.bomb->setPosition(Vec2(b->bomb->getPositionX(), b->bomb->getPositionY()));
@@ -1679,8 +1811,6 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         {
             Mybomb bomb;
             bomb.bomb = Sprite::create("bomb.png");
-            bomb.state = new int;
-            *bomb.state = 0;
             bombs.push_back(bomb);
             bomb.bomb->setGlobalZOrder(20);
             if (direction == 0) {
@@ -1939,14 +2069,12 @@ void HelloWorld::clickEvent(cocos2d::CCObject* a, cocos2d::extension::Control::E
         b_resume->addTargetWithActionForControlEvents(this, cccontrol_selector(HelloWorld::clickEvent), Control::EventType::TOUCH_DOWN);
     }
     else if (a==b_quit) {
-        level = 0;
         auto scene = Mymenu::createScene();
         auto transition = TransitionZoomFlipX::create(1, scene);
         Director::getInstance()->replaceScene(transition);
     }
     else if (a == b_restart) {
         canop = 1;
-        level = 0;
         auto scene = HelloWorld::createScene();
         auto transition = TransitionZoomFlipX::create(1, scene);
         Director::getInstance()->replaceScene(transition);

@@ -139,7 +139,7 @@ void Mymenu::clickEvent(CCObject* a, Control::EventType event) {
         Director::getInstance()->replaceScene(transition);
     }
     else if (a == b[1]) {
-        level = 0;
+        level = 1;
         auto scene = HelloWorld::createScene();
         auto transition = TransitionZoomFlipY::create(1, scene);
         Director::getInstance()->replaceScene(transition);
@@ -168,7 +168,7 @@ void Mymenu::iniFunc() {
 
 
     bac = Scale9Sprite::create("buttonblue.png");
-    words[0]= Label::createWithTTF("Teaching", "fonts/Marker Felt.ttf", 36);
+    words[0]= Label::createWithTTF("Test", "fonts/Marker Felt.ttf", 36);
     words[0]->setColor(Color3B(255, 20, 147));
     b[0] = ControlButton::create(words[0], bac);
     b[0]->setPosition(400, 450);

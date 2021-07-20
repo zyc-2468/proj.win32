@@ -92,6 +92,7 @@ public:
     cocos2d::Sprite* door1[20][43];
     cocos2d::Sprite* door2[20][43];
     cocos2d::Sprite* candle[20][43];
+    cocos2d::Sprite* board[20][43];
     cocos2d::Sprite* button[20][43];
     list<Mybomb> bombs;
     list<Mybox> boxes;
@@ -108,8 +109,10 @@ public:
     cocos2d::Animation* smokeAnimation();
     cocos2d::RepeatForever* awagAnimation();
     cocos2d::Sequence* dropwaterSeq(int dir);
+    cocos2d::Sequence* dropwaterSeq2(int i, int j);
     //void arriveop(int i, int j);
-    void doorChange(int i, int j, int color, int mood);
+    void doorChange(int i, int j, int color, int mode);
+    void boardChange(int i, int j, int mode);
     int checkdoor1(int i, int j);
     int checkdoor2(int i, int j);
     void candleLight(int i, int j);
@@ -145,6 +148,7 @@ public:
     void setPic(cocos2d::Sprite* spr, string s);
     void clickEvent(cocos2d::CCObject* pSender, cocos2d::extension::Control::EventType event);
     void winlose();
+    
 };
 
 bool constrain(int i, int j);
@@ -152,5 +156,6 @@ int getx(int j);
 int gety(int i);
 int geti(int y);
 int getj(int x);
+int dis(int a, int b, int c, int d);
 
 #endif // __HELLOWORLD_SCENE_H__
