@@ -8,6 +8,10 @@ public:
 	int i;
 	int j;
 	point(int i, int j) :i(i), j(j) {}
+	point() {}
+	bool operator==(const point& p) {
+		return this->i == p.i && this->j == p.j;
+	}
 };
 
 class Mybutton {
@@ -23,8 +27,15 @@ class Mycandle {
 public:
 	int hascandle;
 	point doorpos;
+	int state = 0;
 	Mycandle() :hascandle(0), doorpos(0, 0) {}
 	Mycandle(int hascandle, int i, int j) :hascandle(hascandle), doorpos(i,j) {}
+	int notlight() {
+		return hascandle == 1 && state == 0;
+	}
+	int light() {
+		return hascandle == 1 && state == 1;
+	}
 };
 
 class Mydoor {
@@ -35,7 +46,7 @@ public:
 	int nowbutton = 0;
 	int status = 0;
 	Mydoor() :hasdoor(0), color(0), needbutton(1),nowbutton(0),status(0) {}
-	Mydoor(int hasdoor, int color, int index, int needbutton) :hasdoor(hasdoor), color(color), needbutton(needbutton),nowbutton(0),status(0) {}
+	Mydoor(int hasdoor, int color,int needbutton) :hasdoor(hasdoor), color(color), needbutton(needbutton),nowbutton(0),status(0) {}
 };
 
 class Mysquare {
@@ -46,13 +57,27 @@ public:
 	Mydoor door2;
 	Mybutton button;
 	int hasbox;
+	string word = "";
 };
-
 
 class Mygraph {
 public:
-	Mysquare squares[16][24];
-	Mygraph();
+	Mysquare squares[20][43];
+	vector<point> inibox;
+	vector<point> monsters;
+	vector<point>iniarrow;
+	vector<point>inifirearrow;
+	vector<point>inibomb;
+	vector<point>iniblood;
+	int boxnum = 0;
+	int bombnum = 0;
+	int arrownum = 0;
+	int firearrownum = 0;
+	point win;
+	int blood = 10;
+
+	Mygraph(int id);
+	Mygraph() {}
 };
 
 #endif
