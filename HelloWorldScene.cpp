@@ -657,7 +657,7 @@ void HelloWorld::boardChange(int i, int j,int mode) {
         if (g.squares[i][j].board.state == 1) {
             board[i][j]->setOpacity(130);
             g.squares[i][j].board.state = 0;
-            if (posi == i && posj == j) {
+            if (getpos(person)==point(i,j)) {
                 point land = findLand();
                 //auto seq = dropwaterSeq2(g.squares[i][j].board.toi, g.squares[i][j].board.toj);
                 auto seq = dropwaterSeq2(land.i, land.j);
@@ -1062,6 +1062,8 @@ Sequence* HelloWorld::dropwaterSeq2(int i, int j) {
         posi = i;
         posj = j;
         addpath(posi, posj);
+        persononto(posi, posj);
+        checkonto(posi, posj);
         });
     auto move = MoveTo::create(dis(getx(posj), getx(j), gety(posi), gety(i)) / 600.0, Point(getx(j), gety(i)));
     auto seq = Sequence::create(startcall, act, callfunc, cocos2d::DelayTime::create(0.3), act2, move, blink, finishcall, NULL);
@@ -1583,7 +1585,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     //判断 keyCode 枚举来区分所按下的按键
-    auto moveUp = MoveBy::create(0.1, Point(0, 40));
+    
     auto moveUpbox = MoveBy::create(0.1, Point(0, 40));
 
     auto moveDown = MoveBy::create(0.1, Point(0, -40));
@@ -1602,6 +1604,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("pback.png");
         person->setTexture(texture);
         direction = 0;
+
         if (isWater(posi+1,posj)) {
             auto seq = dropwaterSeq(0);
             person->runAction(seq);
@@ -1611,16 +1614,24 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 if (canBoxGo(posi + 2, posj,0) && checkdoor1(posi + 2, posj) == 1) {
                     for (auto box : boxes) {
                         if (getpos(box.box) == point(posi + 1, posj) && *box.state != 3) {
+                            auto moveUp = MoveBy::create(0.1, Point(0, 40));
                             auto act = MoveBy::create(0.1, Point(0, 40));
-                            person->runAction(moveUp);
+                            auto startfunc = CallFunc::create([=] {
+                                
+                                });
+                            auto endfunc = CallFunc::create([=] {
+                                checkleave(posi, posj);
+                                personleave(posi, posj);
+                                posi += 1;
+                                checkonto(posi + 1, posj);
+                                persononto(posi, posi);
+                                boxonto(box, posi + 1, posj);
+                                
+                                addpath(posi, posj);
+                                });
+                            auto seq = Sequence::create(startfunc, moveUp, endfunc, NULL);
+                            person->runAction(seq);
                             box.box->runAction(act);
-                            checkleave(posi, posj);
-                            personleave(posi, posj);
-                            checkonto(posi + 2, posj);
-                            persononto(posi + 1, posi);
-                            boxonto(box, posi+2, posj);
-                            posi += 1;
-                            addpath(posi, posj);
                             break;
                         }
                     }
@@ -1632,16 +1643,24 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 if (getpos(bomb.bomb) == point(posi + 1, posj) &&*bomb.state != 3 && *bomb.state != 5) {
                     f = 1;
                     if (canBoxGo(posi + 2, posj,0) && checkdoor1(posi + 2, posj) == 1) {
+                        auto moveUp = MoveBy::create(0.1, Point(0, 40));
                         auto act = MoveBy::create(0.1, Point(0, 40));
-                        person->runAction(moveUp);
+                        auto startfunc = CallFunc::create([=] {
+                            
+                            });
+                        auto endfunc = CallFunc::create([=] {
+                            checkleave(posi, posj);
+                            personleave(posi, posj);
+                            posi += 1;
+                            checkonto(posi + 1, posj);
+                            persononto(posi, posj);
+                            bombonto(bomb, posi + 1, posj);
+                            
+                            addpath(posi, posj);
+                            });
+                        auto seq = Sequence::create(startfunc, moveUp, endfunc, NULL);
+                        person->runAction(seq);
                         bomb.bomb->runAction(act);
-                        checkleave(posi, posj);
-                        personleave(posi, posj);
-                        checkonto(posi + 2, posj);
-                        persononto(posi + 1, posj);
-                        bombonto(bomb, posi + 2, posj);
-                        posi += 1;
-                        addpath(posi, posj);
                     }
                     else {
                         break;
@@ -1649,18 +1668,20 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 }
             }
             if (f == 1)break;
-            checkleave(posi, posj);
-            personleave(posi, posj);
-            if (isWater(posi + 1, posj)) {
-                auto seq = dropwaterSeq(0);
-                person->runAction(seq);
-                break;
-            }
-            checkonto(posi + 1, posj);
-            persononto(posi + 1, posj);
-            person->runAction(moveUp);
-            posi += 1;
-            addpath(posi, posj);
+            auto moveUp = MoveBy::create(0.1, Point(0, 40));
+            auto startfunc = CallFunc::create([=] {
+                
+                });
+            auto endfunc = CallFunc::create([=] {
+                checkleave(posi, posj);
+                personleave(posi, posj);
+                posi += 1;
+                checkonto(posi, posj);
+                persononto(posi, posj);
+                addpath(posi, posj);
+                });
+            auto seq = Sequence::create(startfunc, moveUp, endfunc, NULL);
+            person->runAction(seq);  
         }
         break;
     }
@@ -1678,16 +1699,24 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 if (canBoxGo(posi - 2, posj,1) && checkdoor1(posi - 1, posj) == 1) {
                     for (auto box : boxes) {
                         if (getpos(box.box) == point(posi - 1, posj)&&*box.state!=3) {
+                            auto moveDown = MoveBy::create(0.1, Point(0, -40));
                             auto act = MoveBy::create(0.1, Point(0, -40));
-                            person->runAction(moveDown);
+                            auto startfunc = CallFunc::create([=] {
+                                
+                                });
+                            auto endfunc = CallFunc::create([=] {
+                                checkleave(posi, posj);
+                                personleave(posi, posj);
+                                posi -= 1;
+                                checkonto(posi - 1, posj);
+                                persononto(posi, posi);
+                                boxonto(box, posi - 1, posj);
+                                
+                                addpath(posi, posj);
+                                });
+                            auto seq = Sequence::create(startfunc, moveDown, endfunc, NULL);
+                            person->runAction(seq);
                             box.box->runAction(act);
-                            checkleave(posi, posj);
-                            personleave(posi, posj);
-                            checkonto(posi - 2, posj);
-                            boxonto(box, posi-2, posj);
-                            persononto(posi - 1, posj);
-                            posi -= 1;
-                            addpath(posi, posj);
                             break;
                         }
                     }
@@ -1699,16 +1728,23 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 if (getpos(bomb.bomb) == point(posi - 1, posj) && *bomb.state != 3 && *bomb.state != 5) {
                     f = 1;
                     if (canBoxGo(posi - 2, posj,1) && checkdoor1(posi - 1, posj) == 1) {
+                        auto moveDown = MoveBy::create(0.1, Point(0, -40));
                         auto act = MoveBy::create(0.1, Point(0, -40));
-                        person->runAction(moveDown);
+                        auto startfunc = CallFunc::create([=] {
+                            
+                            });
+                        auto endfunc = CallFunc::create([=] {
+                            checkleave(posi, posj);
+                            personleave(posi, posj);
+                            posi -= 1;
+                            checkonto(posi - 1, posj);
+                            persononto(posi, posj);
+                            bombonto(bomb, posi - 1, posj);
+                            addpath(posi, posj);
+                            });
+                        auto seq = Sequence::create(startfunc, moveDown, endfunc, NULL);
+                        person->runAction(seq);
                         bomb.bomb->runAction(act);
-                        checkleave(posi, posj);
-                        personleave(posi, posj);
-                        checkonto(posi - 2, posj);
-                        persononto(posi - 1, posj);
-                        bombonto(bomb, posi - 2, posj);
-                        posi -= 1;
-                        addpath(posi, posj);
                     }
                     else {
                         break;
@@ -1716,18 +1752,20 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 }
             }
             if (f == 1)break;
-            checkleave(posi, posj);
-            personleave(posi, posj);
-            if (isWater(posi-1, posj)) {
-                auto seq = dropwaterSeq(1);
-                person->runAction(seq);
-                break;
-            }
-            checkonto(posi - 1, posj);
-            persononto(posi - 1, posj);
-            person->runAction(moveDown);
-            posi -= 1;
-            addpath(posi, posj);
+            auto moveDown = MoveBy::create(0.1, Point(0, -40));
+            auto startfunc = CallFunc::create([=] {
+                
+                });
+            auto endfunc = CallFunc::create([=] {
+                checkleave(posi, posj);
+                personleave(posi, posj);
+                posi -= 1;
+                checkonto(posi, posj);
+                persononto(posi, posj);
+                addpath(posi, posj);
+                });
+            auto seq = Sequence::create(startfunc, moveDown, endfunc, NULL);
+            person->runAction(seq);
         }
         break;
     }
@@ -1745,16 +1783,23 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 if (canBoxGo(posi, posj-2,2) && checkdoor2(posi, posj-1) == 1) {
                     for (auto box : boxes) {
                         if (getpos(box.box) == point(posi, posj-1) && *box.state != 3) {
-                            auto act = MoveBy::create(0.1, Point(-40,0));
-                            person->runAction(moveLeft);
+                            auto moveLeft = MoveBy::create(0.1, Point(-40, 0));
+                            auto act = MoveBy::create(0.1, Point(-40, 0));
+                            auto startfunc = CallFunc::create([=] {
+                                
+                                });
+                            auto endfunc = CallFunc::create([=] {
+                                checkleave(posi, posj);
+                                personleave(posi, posj);
+                                posj -= 1;
+                                checkonto(posi, posj-1);
+                                persononto(posi, posi);
+                                boxonto(box, posi, posj-1);
+                                addpath(posi, posj);
+                                });
+                            auto seq = Sequence::create(startfunc, moveLeft, endfunc, NULL);
+                            person->runAction(seq);
                             box.box->runAction(act);
-                            checkleave(posi, posj);
-                            personleave(posi, posj);
-                            checkonto(posi, posj-2);
-                            persononto(posi, posj - 1);
-                            boxonto(box, posi, posj-2);
-                            posj -= 1;
-                            addpath(posi, posj);
                             break;
                         }
                     }
@@ -1766,16 +1811,24 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 if (getpos(bomb.bomb) == point(posi, posj - 1) && *bomb.state != 3 && *bomb.state != 5) {
                     f = 1;
                     if (canBoxGo(posi, posj - 2,2) && checkdoor1(posi, posj - 1) == 1) {
-                        auto act = MoveBy::create(0.1, Point(-40, 0));
-                        person->runAction(moveLeft);
+                        auto moveLeft = MoveBy::create(0.1, Point(-40, 0));
+                        auto act = MoveBy::create(0.1, Point(-40,0));
+                        auto startfunc = CallFunc::create([=] {
+                            
+                            });
+                        auto endfunc = CallFunc::create([=] {
+                            checkleave(posi, posj);
+                            personleave(posi, posj);
+                            posj -= 1;
+                            checkonto(posi, posj-1);
+                            persononto(posi, posj);
+                            bombonto(bomb, posi, posj-1);
+                            
+                            addpath(posi, posj);
+                            });
+                        auto seq = Sequence::create(startfunc, moveLeft, endfunc, NULL);
+                        person->runAction(seq);
                         bomb.bomb->runAction(act);
-                        checkleave(posi, posj);
-                        personleave(posi, posj);
-                        checkonto(posi, posj - 2);
-                        persononto(posi, posj - 1);
-                        bombonto(bomb,posi, posj - 2);
-                        posj -= 1;
-                        addpath(posi, posj);
                     }
                     else {
                         break;
@@ -1783,18 +1836,20 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 }
             }
             if (f == 1)break;
-            checkleave(posi, posj);
-            personleave(posi, posj);
-            if (isWater(posi, posj-1)) {
-                auto seq = dropwaterSeq(2);
-                person->runAction(seq);
-                break;
-            }
-            checkonto(posi, posj - 1);
-            persononto(posi, posj - 1);
-            person->runAction(moveLeft);
-            posj -= 1;
-            addpath(posi, posj);
+            auto moveLeft = MoveBy::create(0.1, Point(-40, 0));
+            auto startfunc = CallFunc::create([=] {
+                
+                });
+            auto endfunc = CallFunc::create([=] {
+                checkleave(posi, posj);
+                personleave(posi, posj);
+                posj -= 1;
+                checkonto(posi, posj);
+                persononto(posi, posj);
+                addpath(posi, posj);
+                });
+            auto seq = Sequence::create(startfunc, moveLeft, endfunc, NULL);
+            person->runAction(seq);
         }
         break;
     }
@@ -1813,16 +1868,23 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 if (canBoxGo(posi, posj + 2,3) && checkdoor2(posi, posj + 2) == 1) {
                     for (auto box : boxes) {
                         if (getpos(box.box) == point(posi, posj + 1) && *box.state != 3) {
+                            auto moveRight = MoveBy::create(0.1, Point(40, 0));
                             auto act = MoveBy::create(0.1, Point(40, 0));
-                            person->runAction(moveRight);
+                            auto startfunc = CallFunc::create([=] {
+                                
+                                });
+                            auto endfunc = CallFunc::create([=] {
+                                checkleave(posi, posj);
+                                personleave(posi, posj);
+                                posj += 1;
+                                checkonto(posi, posj + 1);
+                                persononto(posi, posi);
+                                boxonto(box, posi, posj + 1);
+                                addpath(posi, posj);
+                                });
+                            auto seq = Sequence::create(startfunc, moveRight, endfunc, NULL);
+                            person->runAction(seq);
                             box.box->runAction(act);
-                            checkleave(posi, posj);
-                            personleave(posi, posj);
-                            checkonto(posi, posj + 2);
-                            persononto(posi, posj + 1);
-                            boxonto(box, posi, posj + 2);
-                            posj += 1;
-                            addpath(posi, posj);
                             break;
                         }
                     }
@@ -1834,16 +1896,23 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 if (getpos(bomb.bomb) == point(posi, posj + 1) && *bomb.state != 3 && *bomb.state != 5) {
                     f = 1;
                     if (canBoxGo(posi, posj + 2,3) && checkdoor1(posi, posj + 1) == 1) {
+                        auto moveRight = MoveBy::create(0.1, Point(40, 0));
                         auto act = MoveBy::create(0.1, Point(40, 0));
-                        person->runAction(moveRight);
+                        auto startfunc = CallFunc::create([=] {
+                            
+                            });
+                        auto endfunc = CallFunc::create([=] {
+                            checkleave(posi, posj);
+                            personleave(posi, posj);
+                            posj += 1;
+                            checkonto(posi, posj + 1);
+                            persononto(posi, posj);
+                            bombonto(bomb, posi, posj + 1);
+                            addpath(posi, posj);
+                            });
+                        auto seq = Sequence::create(startfunc, moveRight, endfunc, NULL);
+                        person->runAction(seq);
                         bomb.bomb->runAction(act);
-                        checkleave(posi, posj);
-                        personleave(posi, posj);
-                        checkonto(posi, posj + 2);
-                        persononto(posi, posj + 1);
-                        bombonto(bomb, posi, posj + 2);
-                        posj += 1;
-                        addpath(posi, posj);
                     }
                     else {
                         break;
@@ -1851,18 +1920,20 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 }
             }
             if (f == 1)break;
-            checkleave(posi, posj);
-            personleave(posi, posj);
-            if (isWater(posi, posj + 1)) {
-                auto seq = dropwaterSeq(3);
-                person->runAction(seq);
-                break;
-            }
-            checkonto(posi, posj + 1);
-            persononto(posi, posj + 1);
-            person->runAction(moveRight);
-            posj += 1;
-            addpath(posi, posj);
+            auto moveRight = MoveBy::create(0.1, Point(40, 0));
+            auto startfunc = CallFunc::create([=] {
+                
+                });
+            auto endfunc = CallFunc::create([=] {
+                checkleave(posi, posj);
+                personleave(posi, posj);
+                posj += 1;
+                checkonto(posi, posj);
+                persononto(posi, posj);
+                addpath(posi, posj);
+                });
+            auto seq = Sequence::create(startfunc, moveRight, endfunc, NULL);
+            person->runAction(seq);
         }
         break;
     }
