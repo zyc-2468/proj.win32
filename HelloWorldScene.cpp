@@ -664,7 +664,7 @@ void HelloWorld::boardChange(int i, int j,int mode) {
                 person->runAction(seq);
             }
             for (auto box : boxes) {
-                if (getpos(box.box) == point(i, j)) {
+                if (getpos(box.box) == point(i, j)&&*box.state!=1) {
                     *box.state = 3;
                     CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("box4.png");
                     box.box->setTexture(texture);
@@ -1038,6 +1038,8 @@ Sequence* HelloWorld::dropwaterSeq(int dir) {
         });
     auto finishcall = CallFunc::create([=] {
         if(over==0)canop = 1;
+        checkonto(posi, posj);
+        persononto(posi, posj);
         });
     auto seq = Sequence::create(startcall, move1, act, callfunc, cocos2d::DelayTime::create(0.3), act2,move2,blink,finishcall, NULL);
     return seq;
@@ -1649,6 +1651,11 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             if (f == 1)break;
             checkleave(posi, posj);
             personleave(posi, posj);
+            if (isWater(posi + 1, posj)) {
+                auto seq = dropwaterSeq(2);
+                person->runAction(seq);
+                break;
+            }
             checkonto(posi + 1, posj);
             persononto(posi + 1, posj);
             person->runAction(moveUp);
@@ -1711,6 +1718,11 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             if (f == 1)break;
             checkleave(posi, posj);
             personleave(posi, posj);
+            if (isWater(posi-1, posj)) {
+                auto seq = dropwaterSeq(2);
+                person->runAction(seq);
+                break;
+            }
             checkonto(posi - 1, posj);
             persononto(posi - 1, posj);
             person->runAction(moveDown);
@@ -1773,6 +1785,11 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             if (f == 1)break;
             checkleave(posi, posj);
             personleave(posi, posj);
+            if (isWater(posi, posj-1)) {
+                auto seq = dropwaterSeq(2);
+                person->runAction(seq);
+                break;
+            }
             checkonto(posi, posj - 1);
             persononto(posi, posj - 1);
             person->runAction(moveLeft);
@@ -1836,6 +1853,11 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             if (f == 1)break;
             checkleave(posi, posj);
             personleave(posi, posj);
+            if (isWater(posi, posj + 1)) {
+                auto seq = dropwaterSeq(2);
+                person->runAction(seq);
+                break;
+            }
             checkonto(posi, posj + 1);
             persononto(posi, posj + 1);
             person->runAction(moveRight);
