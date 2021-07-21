@@ -1617,7 +1617,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                             auto moveUp = MoveBy::create(0.1, Point(0, 40));
                             auto act = MoveBy::create(0.1, Point(0, 40));
                             auto startfunc = CallFunc::create([=] {
-                                
+                                canop = 0;
                                 });
                             auto endfunc = CallFunc::create([=] {
                                 checkleave(posi, posj);
@@ -1626,7 +1626,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                                 checkonto(posi + 1, posj);
                                 persononto(posi, posi);
                                 boxonto(box, posi + 1, posj);
-                                
+                                canop = 1;
                                 addpath(posi, posj);
                                 });
                             auto seq = Sequence::create(startfunc, moveUp, endfunc, NULL);
@@ -1646,7 +1646,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                         auto moveUp = MoveBy::create(0.1, Point(0, 40));
                         auto act = MoveBy::create(0.1, Point(0, 40));
                         auto startfunc = CallFunc::create([=] {
-                            
+                            canop = 0;
                             });
                         auto endfunc = CallFunc::create([=] {
                             checkleave(posi, posj);
@@ -1655,7 +1655,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                             checkonto(posi + 1, posj);
                             persononto(posi, posj);
                             bombonto(bomb, posi + 1, posj);
-                            
+                            canop = 1;
                             addpath(posi, posj);
                             });
                         auto seq = Sequence::create(startfunc, moveUp, endfunc, NULL);
@@ -1670,7 +1670,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             if (f == 1)break;
             auto moveUp = MoveBy::create(0.1, Point(0, 40));
             auto startfunc = CallFunc::create([=] {
-                
+                canop = 0;
                 });
             auto endfunc = CallFunc::create([=] {
                 checkleave(posi, posj);
@@ -1678,6 +1678,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 posi += 1;
                 checkonto(posi, posj);
                 persononto(posi, posj);
+                canop = 1;
                 addpath(posi, posj);
                 });
             auto seq = Sequence::create(startfunc, moveUp, endfunc, NULL);
@@ -1702,7 +1703,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                             auto moveDown = MoveBy::create(0.1, Point(0, -40));
                             auto act = MoveBy::create(0.1, Point(0, -40));
                             auto startfunc = CallFunc::create([=] {
-                                
+                                canop = 0;
                                 });
                             auto endfunc = CallFunc::create([=] {
                                 checkleave(posi, posj);
@@ -1711,7 +1712,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                                 checkonto(posi - 1, posj);
                                 persononto(posi, posi);
                                 boxonto(box, posi - 1, posj);
-                                
+                                canop = 1;
                                 addpath(posi, posj);
                                 });
                             auto seq = Sequence::create(startfunc, moveDown, endfunc, NULL);
@@ -1731,7 +1732,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                         auto moveDown = MoveBy::create(0.1, Point(0, -40));
                         auto act = MoveBy::create(0.1, Point(0, -40));
                         auto startfunc = CallFunc::create([=] {
-                            
+                            canop = 0;
                             });
                         auto endfunc = CallFunc::create([=] {
                             checkleave(posi, posj);
@@ -1740,6 +1741,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                             checkonto(posi - 1, posj);
                             persononto(posi, posj);
                             bombonto(bomb, posi - 1, posj);
+                            canop = 1;
                             addpath(posi, posj);
                             });
                         auto seq = Sequence::create(startfunc, moveDown, endfunc, NULL);
@@ -1754,7 +1756,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             if (f == 1)break;
             auto moveDown = MoveBy::create(0.1, Point(0, -40));
             auto startfunc = CallFunc::create([=] {
-                
+                canop = 0;
                 });
             auto endfunc = CallFunc::create([=] {
                 checkleave(posi, posj);
@@ -1762,6 +1764,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 posi -= 1;
                 checkonto(posi, posj);
                 persononto(posi, posj);
+                canop = 1;
                 addpath(posi, posj);
                 });
             auto seq = Sequence::create(startfunc, moveDown, endfunc, NULL);
@@ -1786,7 +1789,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                             auto moveLeft = MoveBy::create(0.1, Point(-40, 0));
                             auto act = MoveBy::create(0.1, Point(-40, 0));
                             auto startfunc = CallFunc::create([=] {
-                                
+                                canop = 0;
                                 });
                             auto endfunc = CallFunc::create([=] {
                                 checkleave(posi, posj);
@@ -1795,6 +1798,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                                 checkonto(posi, posj-1);
                                 persononto(posi, posi);
                                 boxonto(box, posi, posj-1);
+                                canop = 1;
                                 addpath(posi, posj);
                                 });
                             auto seq = Sequence::create(startfunc, moveLeft, endfunc, NULL);
@@ -1814,7 +1818,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                         auto moveLeft = MoveBy::create(0.1, Point(-40, 0));
                         auto act = MoveBy::create(0.1, Point(-40,0));
                         auto startfunc = CallFunc::create([=] {
-                            
+                            canop = 0;
                             });
                         auto endfunc = CallFunc::create([=] {
                             checkleave(posi, posj);
@@ -1823,7 +1827,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                             checkonto(posi, posj-1);
                             persononto(posi, posj);
                             bombonto(bomb, posi, posj-1);
-                            
+                            canop = 1;
                             addpath(posi, posj);
                             });
                         auto seq = Sequence::create(startfunc, moveLeft, endfunc, NULL);
@@ -1838,7 +1842,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             if (f == 1)break;
             auto moveLeft = MoveBy::create(0.1, Point(-40, 0));
             auto startfunc = CallFunc::create([=] {
-                
+                canop = 0;
                 });
             auto endfunc = CallFunc::create([=] {
                 checkleave(posi, posj);
@@ -1846,6 +1850,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 posj -= 1;
                 checkonto(posi, posj);
                 persononto(posi, posj);
+                canop = 1;
                 addpath(posi, posj);
                 });
             auto seq = Sequence::create(startfunc, moveLeft, endfunc, NULL);
@@ -1871,7 +1876,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                             auto moveRight = MoveBy::create(0.1, Point(40, 0));
                             auto act = MoveBy::create(0.1, Point(40, 0));
                             auto startfunc = CallFunc::create([=] {
-                                
+                                canop = 0;
                                 });
                             auto endfunc = CallFunc::create([=] {
                                 checkleave(posi, posj);
@@ -1880,6 +1885,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                                 checkonto(posi, posj + 1);
                                 persononto(posi, posi);
                                 boxonto(box, posi, posj + 1);
+                                canop = 1;
                                 addpath(posi, posj);
                                 });
                             auto seq = Sequence::create(startfunc, moveRight, endfunc, NULL);
@@ -1899,7 +1905,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                         auto moveRight = MoveBy::create(0.1, Point(40, 0));
                         auto act = MoveBy::create(0.1, Point(40, 0));
                         auto startfunc = CallFunc::create([=] {
-                            
+                            canop = 0;
                             });
                         auto endfunc = CallFunc::create([=] {
                             checkleave(posi, posj);
@@ -1908,6 +1914,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                             checkonto(posi, posj + 1);
                             persononto(posi, posj);
                             bombonto(bomb, posi, posj + 1);
+                            canop = 1;
                             addpath(posi, posj);
                             });
                         auto seq = Sequence::create(startfunc, moveRight, endfunc, NULL);
@@ -1922,7 +1929,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             if (f == 1)break;
             auto moveRight = MoveBy::create(0.1, Point(40, 0));
             auto startfunc = CallFunc::create([=] {
-                
+                canop = 0;
                 });
             auto endfunc = CallFunc::create([=] {
                 checkleave(posi, posj);
@@ -1930,6 +1937,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
                 posj += 1;
                 checkonto(posi, posj);
                 persononto(posi, posj);
+                canop = 1;
                 addpath(posi, posj);
                 });
             auto seq = Sequence::create(startfunc, moveRight, endfunc, NULL);
