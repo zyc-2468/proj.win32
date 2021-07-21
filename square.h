@@ -47,7 +47,7 @@ public :
 	int toi = 0;
 	int toj = 0;
 	Myboard() :hasboard(0), needbutton(1), nowbutton(0), state(0) {}
-	Myboard(int hasboard, int needbutton, int toi, int toj) :hasboard(hasboard), needbutton(needbutton), nowbutton(0), state(0),toi(toi),toj(toj) {}
+	Myboard(int hasboard, int needbutton) :hasboard(hasboard), needbutton(needbutton), nowbutton(0), state(0){}
 	int cango() {
 		return hasboard == 1 && state == 1;
 	}
@@ -75,6 +75,7 @@ public:
 	Mybutton button;
 	int hasbox;
 	string word = "";
+	int wordsize = 36;
 	Myboard board;
 };
 
@@ -94,9 +95,13 @@ public:
 	int firearrownum = 0;
 	point win;
 	int blood = 10;
+	int inii;
+	int inij;
 
 	Mygraph(int id);
 	Mygraph() {}
+
+	void settype(int i1, int i2, int j1, int j2, int t1);
 };
 
 #endif

@@ -157,7 +157,7 @@ bool HelloWorld::init()
     listener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     
-    auto lc = CCLayerColor::create(Color4B(255, 250, 250,240));
+    auto lc = CCLayerColor::create(Color4B(255, 250, 250,255));
     this->addChild(lc);
     iniFunc();
     return true;
@@ -204,7 +204,7 @@ void HelloWorld::iniFunc() {
     
 
     person = Sprite::create("pfront.png");
-    person->setPosition(Vec2(origin.x + 80, origin.y + 80));
+    person->setPosition(Vec2(origin.x + posj * 40 + 40, origin.y + posi * 40 + 40));
     person->setGlobalZOrder(7);
     this->addChild(person);
 
@@ -440,7 +440,7 @@ int dis(int x, int y) {
 }
 
 void HelloWorld::addpath(int i, int j) {
-    if (path.size() < 30) {
+    if (path.size() < 10) {
         path.push_back(point(i, j));
     }
     else {
@@ -837,7 +837,7 @@ void HelloWorld::persononto(int i, int j) {
         note->setPosition(Vec2(1100, 450));
         note->setGlobalZOrder(30);
         this->addChild(note);
-        noteword = Label::createWithTTF(g.squares[i][j].word, "fonts/Marker Felt.ttf", 36);
+        noteword = Label::createWithTTF(g.squares[i][j].word, "fonts/Marker Felt.ttf", g.squares[i][j].wordsize);
         noteword->setPosition(Vec2(1100, 450));
         noteword->setTextColor(Color4B(0, 0, 0, 255));
         noteword->setGlobalZOrder(30);

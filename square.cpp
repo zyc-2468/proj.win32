@@ -1,7 +1,16 @@
 #include"square.h"
 
+void Mygraph::settype(int i1, int i2, int j1, int j2, int t1)
+{
+	for (int i = i1; i <= i2; i++)
+		for (int j = j1; j <= j2; j++)
+			squares[i][j].type = t1;
+}
+
 Mygraph::Mygraph(int id) {
 	if (id == 0) {
+		inii = 1;
+		inij = 1;
 		//squares type: 0 none 1: wall 2:strong wall 3: water 4: on campfire 5: off campfire
 		for (int i = 0; i < 20; i++)squares[i][0].type = 2;
 		for (int i = 0; i < 20; i++)squares[i][42].type = 2;
@@ -34,6 +43,8 @@ Mygraph::Mygraph(int id) {
 		squares[5][20].type = 0;
 		squares[13][1].type = 6;
 		squares[3][8].word = "This is a note.";
+		squares[3][8].wordsize = 12;
+		//squares[3][8].word = "This is.";
 		iniarrow.push_back(point(2, 2));
 		inibomb.push_back(point(2, 3));
 		inibox.push_back(point(2, 4));
@@ -44,11 +55,14 @@ Mygraph::Mygraph(int id) {
 		arrownum = 10;
 		firearrownum = 10;
 		win = point(10, 30);
-		squares[12][19].board = Myboard(1, 1, 12, 18);
+		squares[12][19].board = Myboard(1, 1);
 		squares[10][25].button = Mybutton(1, 5, 12, 19);
+		
 
 	}
 	else if (id == 1) {
+		inii = 1;
+		inij = 1;
 		for (int i = 0; i < 20; i++)squares[i][0].type = 2;
 		for (int i = 0; i < 20; i++)squares[i][42].type = 2;
 		for (int j = 0; j < 43; j++)squares[0][j].type = 2;
@@ -101,7 +115,7 @@ Mygraph::Mygraph(int id) {
 		squares[16][12].type = 3;
 		squares[16][13].type = 3;
 		squares[15][13].door2 = Mydoor(1, 4, 2);
-		squares[16][12].board = Myboard(1, 1, 15, 12);
+		squares[16][12].board = Myboard(1, 1);
 		squares[18][12].button = Mybutton(1, 4, 15, 13);
 		squares[1][7].button = Mybutton(1, 5, 16, 12);
 		squares[17][13].type = 2;
@@ -134,7 +148,7 @@ Mygraph::Mygraph(int id) {
 		squares[6][14].type = 3;
 		squares[6][16].type = 3;
 
-		squares[6][16].board = Myboard(1, 1, 7, 16);
+		squares[6][16].board = Myboard(1, 1);
 		iniblood.push_back(point(17, 18));
 		iniblood.push_back(point(16, 18));
 		iniblood.push_back(point(15, 18));
@@ -186,7 +200,7 @@ Mygraph::Mygraph(int id) {
 		for (int i = 18; i >= 1; i--) {
 			squares[i][32].type = 3;
 		}
-		squares[16][32].board = Myboard(1, 1, 16, 31);
+		squares[16][32].board = Myboard(1, 1);
 		for (int i = 18; i >= 10; i--) {
 			squares[i][36].type = 3;
 		}
@@ -210,6 +224,245 @@ Mygraph::Mygraph(int id) {
 		for (int i = 8; i >= 1; i--) {
 			squares[i][36].type = 3;
 		}
+	}
+	else if (id == 2) {
+
+	settype(0, 19, 0, 0, 2);
+	settype(0, 0, 0, 42, 2);
+	settype(19, 19, 0, 42, 2);
+	settype(0, 19, 42, 42, 2);
+	settype(1, 1, 1, 9, 2);
+	settype(1, 1, 11, 19, 2);
+	settype(9, 9, 1, 9, 2);
+	settype(9, 9, 11, 19, 2);
+	settype(11, 11, 1, 9, 2);
+	settype(11, 11, 11, 19, 2);
+
+	settype(9, 9, 22, 31, 2);
+	settype(9, 9, 33, 41, 2);
+	settype(11, 11, 22, 31, 2);
+	settype(11, 11, 33, 41, 2);
+
+	settype(1, 9, 1, 1, 2);
+	settype(1, 9, 19, 19, 2);
+	settype(1, 9, 22, 22, 2);
+	settype(1, 9, 20, 20, 2);
+
+	settype(11, 18, 22, 22, 2);
+	settype(11, 18, 20, 20, 2);
+
+	settype(13, 13, 2, 9, 2);
+	settype(13, 13, 11, 18, 2);
+	settype(17, 17, 2, 9, 2);
+	settype(17, 17, 11, 18, 2);
+
+
+	settype(15, 16, 2, 4, 2);
+	settype(15, 16, 16, 18, 2);
+	settype(13, 15, 6, 9, 2);
+	settype(13, 15, 11, 14, 2);
+
+
+	settype(3, 7, 3, 9, 2);
+
+	settype(3, 7, 11, 17, 2);
+	settype(6, 6, 8, 12, 0);
+
+	squares[4][37].type = 2;
+
+
+	settype(13, 13, 24, 34, 2);
+	squares[12][34].type = 2;
+	squares[14][31].type = 2;
+
+	settype(13, 18, 38, 38, 2);
+	settype(12, 17, 40, 40, 2);
+	//strong wall part
+
+	squares[12][9].type = 3;
+	squares[12][11].type = 3;
+	squares[18][9].type = 3;
+	squares[18][11].type = 3;
+	squares[13][19].type = 3;
+	squares[7][10].type = 3;
+	squares[1][28].type = 3;
+	squares[1][31].type = 3;
+	squares[5][31].type = 3;
+	squares[15][34].type = 3;
+
+	settype(3, 9, 21, 21, 3);
+	settype(2, 2, 4, 4, 3);
+	settype(2, 2, 16, 17, 3);
+
+	settype(15, 18, 26, 26, 3);
+	settype(14, 14, 27, 31, 3);
+
+	settype(8, 8, 24, 31, 3);
+	settype(2, 8, 24, 24, 3);
+	settype(2, 2, 24, 38, 3);
+
+	settype(4, 4, 26, 33, 3);
+	settype(6, 6, 26, 33, 3);
+
+
+	settype(4, 8, 33, 33, 3);
+
+	settype(1, 5, 35, 35, 3);
+	settype(1, 5, 38, 38, 3);
+	settype(5, 5, 35, 38, 3);
+
+	settype(6, 6, 38, 41, 3);
+
+	settype(6, 8, 39, 39, 3);
+	squares[5][33].type = 0;
+	//water part
+
+	squares[12][15].type = 6;
+	squares[2][10].type = 6;
+	squares[5][27].type = 6;
+	squares[3][32].type = 6;
+	//tree part
+
+	squares[18][29].type = 1;
+	squares[15][31].type = 1;
+	//wall part
+
+	squares[12][12].candle = Mycandle(1, 13, 21);
+	squares[13][39].candle = Mycandle(1, 13, 21);
+	squares[1][21].candle = Mycandle(1, 13, 21);
+	squares[13][39].candle.state = 1;
+	//candle part
+
+	squares[9][10].door1 = Mydoor(1, 1, 1);
+	squares[11][10].door1 = Mydoor(1, 2, 3);
+	squares[11][32].door1 = Mydoor(1, 3, 1);
+	squares[11][21].door1 = Mydoor(1, 4, 1);
+
+	//normal door part
+
+	settype(15, 18, 25, 25, 4);
+	squares[12][10].type = 4;
+	squares[5][32].type = 4;
+	squares[18][5].type = 4;
+	squares[2][5].type = 4;
+	squares[2][15].type = 4;
+	//campfire part
+
+
+	squares[8][23].button = Mybutton(1, 1, 9, 10);
+	squares[6][8].button = Mybutton(1, 2, 11, 10);
+	squares[6][12].button = Mybutton(1, 2, 11, 10);
+	squares[1][10].button = Mybutton(1, 2, 11, 10);
+	squares[12][13].button = Mybutton(1, 3, 11, 32);
+	squares[12][41].button = Mybutton(1, 4, 11, 21);
+	//button part
+
+	squares[7][10].board = Myboard(1, 1);
+	squares[8][10].button = Mybutton(1, 5, 7, 10);
+
+	squares[14][31].board = Myboard(1, 1);
+	squares[18][37].button = Mybutton(1, 5, 14, 31);
+
+	squares[14][29].board = Myboard(1, 1);
+	squares[17][37].button = Mybutton(1, 5, 14, 29);
+
+	squares[14][27].board = Myboard(1, 1);
+	squares[18][35].button = Mybutton(1, 5, 14, 27);
+
+	//board part
+
+
+	squares[13][21].door1 = Mydoor(1, 0, 2);
+	// fire door part
+
+
+	inibomb.push_back(point(18, 19));
+	inibomb.push_back(point(6, 10));
+	inibomb.push_back(point(18, 27));
+	inibomb.push_back(point(16, 28));
+	inibomb.push_back(point(17, 30));
+	inibomb.push_back(point(16, 32));
+	inibomb.push_back(point(15, 32));
+	inibomb.push_back(point(15, 35));
+	inibomb.push_back(point(18, 39));
+	inibomb.push_back(point(18, 40));
+	inibomb.push_back(point(18, 41));
+
+
+	inibomb.push_back(point(10, 10));
+	//bomb part
+
+
+	inibox2.push_back(point(6, 23));
+	inibox2.push_back(point(6, 9));
+	inibox2.push_back(point(6, 11));
+	inibox2.push_back(point(6, 34));
+	inibox2.push_back(point(6, 35));
+	inibox2.push_back(point(6, 37));
+
+	inibox2.push_back(point(5, 10));
+	inibox2.push_back(point(5, 41));
+	inibox2.push_back(point(4, 39));
+	inibox2.push_back(point(3, 39));
+	inibox2.push_back(point(3, 40));
+	inibox2.push_back(point(2, 39));
+	inibox2.push_back(point(1, 40));
+
+	inibox2.push_back(point(7, 35));
+	inibox2.push_back(point(7, 37));
+	inibox2.push_back(point(7, 38));
+	inibox2.push_back(point(7, 41));
+	inibox2.push_back(point(8, 36));
+
+
+	inibox2.push_back(point(12, 16));
+	inibox2.push_back(point(17, 19));
+
+
+	inibox2.push_back(point(15, 28));
+	inibox2.push_back(point(18, 28));
+	inibox2.push_back(point(16, 30));
+	inibox2.push_back(point(17, 31));
+	inibox2.push_back(point(15, 33));
+	inibox2.push_back(point(16, 35));
+	inibox2.push_back(point(17, 41));
+	//box part
+
+	iniblood.push_back(point(17, 10));
+	iniblood.push_back(point(16, 10));
+	//life part
+
+	iniarrow.push_back(point(7, 28));
+	iniarrow.push_back(point(7, 30));
+	iniarrow.push_back(point(8, 16));
+
+	iniarrow.push_back(point(14, 2));
+	iniarrow.push_back(point(15, 23));
+	iniarrow.push_back(point(16, 23));
+	iniarrow.push_back(point(17, 23));
+	iniarrow.push_back(point(18, 23));
+	iniarrow.push_back(point(12, 35));
+	//arrow part
+
+
+	inifirearrow.push_back(point(13, 35));
+	inifirearrow.push_back(point(5, 28));
+	//fire arrow part
+
+
+	win = point(18, 21);
+
+
+
+
+	squares[10][23].word = "The Ancient Temple is \n Abandoned Now";
+	squares[10][24].word = "Clerics is Seeking for\n YOUR DESPAIR and\n SUFFERING";
+	squares[10][25].word = "Only Way to Escape \n is Going Through --";
+	squares[10][26].word = "--Throught Challenge from\n Four Element";
+	squares[10][22].word = "";
+	squares[10][22].word = "";
+	inii = 10;
+	inij = 21;
 	}
 	else {
 
