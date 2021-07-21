@@ -836,6 +836,7 @@ void HelloWorld::persononto(int i, int j) {
         note = Sprite::create("wordarea.png");
         note->setPosition(Vec2(1100, 450));
         note->setGlobalZOrder(30);
+        note->setOpacity(150);
         this->addChild(note);
         noteword = Label::createWithTTF(g.squares[i][j].word, "fonts/Marker Felt.ttf", g.squares[i][j].wordsize);
         noteword->setPosition(Vec2(1100, 450));
