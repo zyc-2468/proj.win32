@@ -1652,7 +1652,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             checkleave(posi, posj);
             personleave(posi, posj);
             if (isWater(posi + 1, posj)) {
-                auto seq = dropwaterSeq(2);
+                auto seq = dropwaterSeq(0);
                 person->runAction(seq);
                 break;
             }
@@ -1719,7 +1719,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             checkleave(posi, posj);
             personleave(posi, posj);
             if (isWater(posi-1, posj)) {
-                auto seq = dropwaterSeq(2);
+                auto seq = dropwaterSeq(1);
                 person->runAction(seq);
                 break;
             }
@@ -1854,7 +1854,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             checkleave(posi, posj);
             personleave(posi, posj);
             if (isWater(posi, posj + 1)) {
-                auto seq = dropwaterSeq(2);
+                auto seq = dropwaterSeq(3);
                 person->runAction(seq);
                 break;
             }
