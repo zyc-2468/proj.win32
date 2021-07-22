@@ -95,13 +95,14 @@ public:
 	int firearrownum = 0;
 	point win;
 	int blood = 10;
-	int inii;
-	int inij;
+	int inii = 1;
+	int inij = 1;
 
 	Mygraph(int id);
 	Mygraph() {}
 
 	void settype(int i1, int i2, int j1, int j2, int t1);
+	void settype2(int i1, int i2, int j1, int j2, int t1);
 };
 
 #endif

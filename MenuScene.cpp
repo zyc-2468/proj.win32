@@ -139,19 +139,25 @@ void Mymenu::clickEvent(CCObject* a, Control::EventType event) {
         Director::getInstance()->replaceScene(transition);
     }
     else if (a == b[1]) {
-        level = 1;
+        level = 4;
         auto scene = HelloWorld::createScene();
         auto transition = TransitionZoomFlipY::create(1, scene);
         Director::getInstance()->replaceScene(transition);
     }
     else if (a == b[2]) {
-        level = 2;
+        level = 1;
         auto scene = HelloWorld::createScene();
         auto transition = TransitionZoomFlipY::create(1, scene);
         Director::getInstance()->replaceScene(transition);
     }
     else if (a == b[3]) {
-        level = 0;
+        level = 2;
+        auto scene = HelloWorld::createScene();
+        auto transition = TransitionZoomFlipY::create(1, scene);
+        Director::getInstance()->replaceScene(transition);
+    }
+    else if (a == b[4]) {
+        level = 3;
         auto scene = HelloWorld::createScene();
         auto transition = TransitionZoomFlipY::create(1, scene);
         Director::getInstance()->replaceScene(transition);
@@ -163,7 +169,8 @@ void Mymenu::iniFunc() {
     draw->setGlobalZOrder(0);
     draw->drawSegment(Vec2(450, 460), Vec2(550, 540), 5, Color4F(1, 0.4980, 0.1412, 1));
     draw->drawSegment(Vec2(650, 540), Vec2(750, 460), 5, Color4F(1, 0.4980, 0.1412, 1));
-    draw->drawSegment(Vec2(850, 469), Vec2(950, 540), 5, Color4F(1, 0.4980, 0.1412, 1));
+    draw->drawSegment(Vec2(850, 460), Vec2(950, 540), 5, Color4F(1, 0.4980, 0.1412, 1));
+    draw->drawSegment(Vec2(1050, 540), Vec2(1150, 460), 5, Color4F(1, 0.4980, 0.1412, 1));
     this->addChild(draw);
 
 
@@ -177,7 +184,7 @@ void Mymenu::iniFunc() {
     b[0]->addTargetWithActionForControlEvents(this, cccontrol_selector(Mymenu::clickEvent), Control::EventType::TOUCH_DOWN);
 
     bac = Scale9Sprite::create("buttonblue.png");
-    words[1] = Label::createWithTTF("Level 1", "fonts/Marker Felt.ttf", 36);
+    words[1] = Label::createWithTTF("Guide", "fonts/Marker Felt.ttf", 36);
     words[1]->setColor(Color3B(255, 20, 147));
     b[1] = ControlButton::create(words[1], bac);
     b[1]->setPosition(600, 550);
@@ -186,7 +193,7 @@ void Mymenu::iniFunc() {
     b[1]->addTargetWithActionForControlEvents(this, cccontrol_selector(Mymenu::clickEvent), Control::EventType::TOUCH_DOWN);
 
     bac = Scale9Sprite::create("buttonblue.png");
-    words[2] = Label::createWithTTF("Level 2", "fonts/Marker Felt.ttf", 36);
+    words[2] = Label::createWithTTF("Level 1", "fonts/Marker Felt.ttf", 36);
     words[2]->setColor(Color3B(255, 20, 147));
     b[2] = ControlButton::create(words[2], bac);
     b[2]->setPosition(800, 450);
@@ -195,13 +202,69 @@ void Mymenu::iniFunc() {
     b[2]->addTargetWithActionForControlEvents(this, cccontrol_selector(Mymenu::clickEvent), Control::EventType::TOUCH_DOWN);
 
     bac = Scale9Sprite::create("buttonblue.png");
-    words[3] = Label::createWithTTF("Level 3", "fonts/Marker Felt.ttf", 36);
+    words[3] = Label::createWithTTF("Level 2", "fonts/Marker Felt.ttf", 36);
     words[3]->setColor(Color3B(255, 20, 147));
     b[3] = ControlButton::create(words[3], bac);
     b[3]->setPosition(1000, 550);
     b[3]->setGlobalZOrder(10);
     this->addChild(b[3]);
     b[3]->addTargetWithActionForControlEvents(this, cccontrol_selector(Mymenu::clickEvent), Control::EventType::TOUCH_DOWN);
+
+    bac = Scale9Sprite::create("buttonblue.png");
+    words[4] = Label::createWithTTF("Level 3", "fonts/Marker Felt.ttf", 36);
+    words[4]->setColor(Color3B(255, 20, 147));
+    b[4] = ControlButton::create(words[4], bac);
+    b[4]->setPosition(1200, 450);
+    b[4]->setGlobalZOrder(10);
+    this->addChild(b[4]);
+    b[4]->addTargetWithActionForControlEvents(this, cccontrol_selector(Mymenu::clickEvent), Control::EventType::TOUCH_DOWN);
+
+    auto menubox = Sprite::create("box.png");
+    menubox->setPosition(Vec2(300, 300));
+    menubox->setGlobalZOrder(0);
+    this->addChild(menubox);
+
+    auto menuarrow = Sprite::create("arrow.png");
+    menuarrow->setPosition(Vec2(650, 300));
+    menuarrow->setGlobalZOrder(0);
+    this->addChild(menuarrow);
+
+    auto menufirearrow = Sprite::create("firearrow.png");
+    menufirearrow->setPosition(Vec2(1050, 300));
+    menufirearrow->setGlobalZOrder(0);
+    this->addChild(menufirearrow);
+
+    auto menubomb = Sprite::create("bomb.png");
+    menubomb->setPosition(Vec2(1450, 300));
+    menubomb->setGlobalZOrder(0);
+    this->addChild(menubomb);
+
+    Label* menu0, * menu1, * menu2, * menu3;
+
+    menu0 = Label::createWithTTF(": ALT", "fonts/Marker Felt.ttf", 28);
+    menu0->setPosition(Vec2(380, 300));
+    menu0->setTextColor(Color4B(0, 0, 0, 255));
+    this->addChild(menu0);
+
+    menu1 = Label::createWithTTF(": BACKSPACE" , "fonts/Marker Felt.ttf", 28);
+    menu1->setPosition(Vec2(800, 300));
+    menu1->setTextColor(Color4B(0, 0, 0, 255));
+    this->addChild(menu1);
+
+    menu2 = Label::createWithTTF(": ENTER", "fonts/Marker Felt.ttf", 28);
+    menu2->setPosition(Vec2(1170, 300));
+    menu2->setTextColor(Color4B(0, 0, 0, 255));
+    this->addChild(menu2);
+
+    menu3 = Label::createWithTTF(": SPACE", "fonts/Marker Felt.ttf", 28);
+    menu3->setPosition(Vec2(1550, 300));
+    menu3->setTextColor(Color4B(0, 0, 0, 255));
+    this->addChild(menu3);
+
+    menu3 = Label::createWithTTF("Operations --", "fonts/Marker Felt.ttf", 28);
+    menu3->setPosition(Vec2(200, 330));
+    menu3->setTextColor(Color4B(106, 90, 205, 255));
+    this->addChild(menu3);
 
     return;
 }
